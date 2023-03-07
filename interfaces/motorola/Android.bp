@@ -1,4 +1,4 @@
 hidl_package_root {
-    name: "com.motorola",
+    name: "motorola",
     path: "hardware/motorola/interfaces/motorola",
 }
