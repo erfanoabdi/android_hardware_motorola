@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="adaptive_charging_upper_threshold">Upper</string>
+    <string name="adaptive_charging_lower_threshold">Lower</string>
+    <string name="adaptive_charging_title">Adaptive Charging</string>
+    <string name="adaptive_charging_summary">Adaptive Charging Summary</string>
+
+</resources>

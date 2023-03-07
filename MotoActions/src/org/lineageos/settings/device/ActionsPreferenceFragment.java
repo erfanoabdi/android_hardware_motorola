@@ -17,19 +17,42 @@
 
 package org.lineageos.settings.device;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.preference.PreferenceCategory;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 
-public class ActionsPreferenceFragment extends PreferenceFragment {
+import motorola.hardware.health.V2_0.IMotHealth;
+import motorola.hardware.health.V2_0.Result;
+
+public class ActionsPreferenceFragment extends PreferenceFragment implements
+        Preference.OnPreferenceClickListener {
 
     private static final String KEY_ACTIONS_CATEGORY = "actions_key";
+    public static final String KEY_ADAPTIVE_CHARGING = "adaptive_charging";
+
+    protected Preference adaptiveCharging;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.actions_panel);
+
+        adaptiveCharging = findPreference(KEY_ADAPTIVE_CHARGING);
+        adaptiveCharging.setOnPreferenceClickListener(this);
+        adaptiveCharging.setEnabled(false);
+
+        try {
+            IMotHealth adaptiveChargingService = IMotHealth.getService(false);
+            if (adaptiveChargingService != null) {
+                adaptiveChargingService.getChgLimits((result, lower, upper) -> {
+                    if (result == Result.OK) {
+                        adaptiveCharging.setEnabled(true);
+                    }
+                });
+            }
+        } catch (Exception e) { }
     }
 
     @Override
@@ -38,6 +61,21 @@ public class ActionsPreferenceFragment extends PreferenceFragment {
             getActivity().onBackPressed();
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean onPreferenceClick(Preference pref) {
+        final Context context = getActivity();
+        if (context == null) {
+            return false;
+        }
+
+        if (pref.getKey().equals(KEY_ADAPTIVE_CHARGING)) {
+            AdaptiveChargingDialog.newInstance().show(getActivity().getFragmentManager(), KEY_ADAPTIVE_CHARGING);
+            return true;
+        }
+
         return false;
     }
 }

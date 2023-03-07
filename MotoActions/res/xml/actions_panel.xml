@@ -52,4 +52,10 @@
 
     </PreferenceCategory>
 
+    <Preference
+        android:key="adaptive_charging"
+        android:title="@string/adaptive_charging_title"
+        android:summary="@string/adaptive_charging_summary"
+        android:enabled="false" />
+
 </PreferenceScreen>
